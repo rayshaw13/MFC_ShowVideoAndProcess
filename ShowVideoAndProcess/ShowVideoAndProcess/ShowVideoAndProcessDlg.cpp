@@ -239,20 +239,6 @@ void CShowVideoAndProcessDlg::OnBnClickedGetvideo()
 	}
 	g_thread_run = true;
 	m_th_showimg[1] = std::thread{ thread_func,strReady, &m_video2ctrl };
-
-	//VideoCapture capture("E:\\娱乐\\其他\\curry.mp4");
-	//while (1)
-	//{
-	//	cv::Mat frame;
-	//	cap[0] >> frame;
-	//	//capture >> frame;
-	//	if (frame.empty()) {
-	//		break;
-	//	}
-	//	waitKey(30);
-	//	ShowMatImageOut(frame,);
-	//}
-	//ReleaseCapture();
 }
 
 void CShowVideoAndProcessDlg::OnBnClickedOpenfile()
@@ -279,12 +265,6 @@ void CShowVideoAndProcessDlg::OnBnClickedOpenfile()
 		CString img_select;
 		img_select = open_img.GetPathName();
 		SetDlgItemText(IDC_FileName, img_select);//img_select为选择的文件的路径，IDC_FileName为edit控件名称
-
-		/*string fileLocation;
-		fileLocation = CT2A(img_select.GetString());*/
-
-		//std::string(fileLocation.GetBuffer(fileLocation.GetLength())),m_img1ctrl.GetDC()->GetSafeHdc()
-
 	}
 }
 
@@ -367,16 +347,9 @@ void CShowVideoAndProcessDlg::OnBnClickedStartprocess()
 	char fileNameIn[80];
 	strcpy(fileNameIn, fileLocation.c_str());
 
-	char fileNameOut[80];
-	strcpy(fileNameOut,fileNameIn);
-	fileNameOut[17] = 'o';
-	fileNameOut[18] = 'u';
-	fileNameOut[20] = 'z';
-	fileNameOut[21] = 't';
-	std::string fileLocationOut;
-	fileLocationOut = fileNameOut;
 	cv::Mat imgMatOut;
-	imgMatOut = cv::imread(fileLocationOut, 1);
+	imgMatOut = ImageBlur(imgMatIn);
+	//imgMatOut = cv::imread(fileLocationOut, 1);
 	Sleep(500);
 	DrawImg(imgMatOut, &m_img2ctrl, true);
 
@@ -428,27 +401,12 @@ void DrawImg(cv::Mat &img, CWnd* hwnd, bool bRoomToCtrlSize)
 	cv::Mat imgTmp;
 	CRect rect;
 	hwnd->GetClientRect(&rect);
-	/*if (bRoomToCtrlSize)
-	{
-		cv::resize(img,imgTmp,cv::Size(rect.Width(),rect.Height()));
-	}
-	else
-	{
-		img.copyTo(imgTmp);
-	}*/
-	/*cv::namedWindow("video2", 0);
-	cv::waitKey(2000);*/
-	//cv::imshow()
 	ShowMatImageOut(img, hwnd);
-	/*switch (imgTmp.channels())
-	{
-	case 1:
-		cv::cvtColor(imgTmp, imgTmp, CV_GRAY2BGRA);
-		break;
-	case 3:
-		cv::cvtColor(imgTmp, imgTmp, CV_BGR2BGRA);
-		break;
-	default:
-		break;
-	}*/
+}
+
+cv::Mat ImageBlur(cv::Mat& src)
+{
+	cv::Mat outMat;
+	cv::medianBlur(src, outMat, 5);
+	return outMat;
 }

@@ -63,3 +63,4 @@ void thread_func(const std::string file, CWnd* hwnd);
 void ShowMatImageIn(cv::Mat& src, CWnd* hwnd);
 void ShowMatImageOut(cv::Mat& src, CWnd* hwnd);
 void DrawImg(cv::Mat &img, CWnd* hwnd, bool bRoomToCtrlSize);
+cv::Mat ImageBlur(cv::Mat &src);
